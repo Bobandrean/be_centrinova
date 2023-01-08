@@ -84,7 +84,7 @@ class AuthRepositoryImplement extends Eloquent implements AuthRepository
                 'no_telepon' => $request->no_telepon,
                 'role_id' => $request->role_id,
                 'alamat' => $request->alamat,
-                'active' => '0',
+                'active' => '1',
                 'role_id' => '1',
                 'password' => bcrypt($request->password)
             ]);

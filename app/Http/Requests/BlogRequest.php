@@ -26,7 +26,7 @@ class BlogRequest extends FormRequest
         return [
             "judul" => "required",
             "short_content" => "required",
-            "image" => "required|file|mimes:jpg,jpeg,png,gif"
+            // "image" => "required|file|mimes:jpg,jpeg,png,gif"
         ];
     }
 
@@ -35,7 +35,7 @@ class BlogRequest extends FormRequest
         $message =  [
             'judul.required' => 'Judul required',
             'short_content.required' => 'Short Content required',
-            "image.required.file.mimes:jpg,jpeg,png,gif" => 'Image Required'
+            // "image.required.file.mimes:jpg,jpeg,png,gif" => 'Image Required'
         ];
 
 

@@ -54,6 +54,7 @@ class CommentRepositoryImplement extends Eloquent implements CommentRepository
             $input->id_detail_blog = $id_blog;
             $input->nama = $request->nama;
             $input->comment = $request->comment;
+            $input->email = $request->email ? $request->email : "";
             $input->save();
 
             $count = $this->model->where('id_detail_blog', $id_blog)->count();

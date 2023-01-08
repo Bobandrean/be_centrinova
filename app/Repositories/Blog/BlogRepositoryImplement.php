@@ -28,7 +28,7 @@ class BlogRepositoryImplement extends Eloquent implements BlogRepository
 
     public function getFunction()
     {
-        $query  = $this->model->where('status', 0)->paginate(10);
+        $query  = $this->model->with(['detail'])->where('status', 0)->paginate(10);
 
         if ($query->isEmpty()) {
             return BaseController::error(NULL, "Data tidak ditemukan", 400);
@@ -88,10 +88,12 @@ class BlogRepositoryImplement extends Eloquent implements BlogRepository
         if (empty($query)) {
             return BaseController::error(NULL, "Data tidak ditemukan", 400);
         }
-        $imageName = time() . '.' . $request->image->extension();
-        Storage::disk('public')->putFileAs('image', $request->file('image'), $imageName);
+        if ($request->image) {
+            $imageName = time() . '.' . $request->image->extension();
+            Storage::disk('public')->putFileAs('image', $request->file('image'), $imageName);
+        }
 
-        $url = "http://127.0.0.1:8000/uploads/image/" . $imageName;
+        $url = $request->image ? "http://127.0.0.1:8000/uploads/image/" . $imageName : $query->path;
 
         $query->judul = $request->judul;
         $query->path =  $url;
