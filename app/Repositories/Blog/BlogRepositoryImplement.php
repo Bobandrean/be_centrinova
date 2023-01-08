@@ -8,6 +8,7 @@ use App\Models\detail_blog;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController;
 use DB;
+use File;
 
 
 class BlogRepositoryImplement extends Eloquent implements BlogRepository
@@ -49,19 +50,21 @@ class BlogRepositoryImplement extends Eloquent implements BlogRepository
 
     public function createFunction($request)
     {
+
+
+        // $img = File::get(url('storage/test.jpg'));
+        // return $img;
         try {
-            $save_image = $request->file('image')->store('image', 'public');
+            $imageName = time() . '.' . $request->image->extension();
+            Storage::disk('public')->putFileAs('image', $request->file('image'), $imageName);
 
-
-            $path = Storage::disk('public')->path($save_image);
+            $url = "http://127.0.0.1:8000/uploads/image/" . $imageName;
 
             DB::beginTransaction();
-            $file = storage_path('photos/' . $save_image);
-
 
             $input = new $this->model();
             $input->judul = $request->judul;
-            $input->path = $path;
+            $input->path = $url;
             $input->short_content = $request->short_content;
             $input->save();
             $input->id;
@@ -85,12 +88,13 @@ class BlogRepositoryImplement extends Eloquent implements BlogRepository
         if (empty($query)) {
             return BaseController::error(NULL, "Data tidak ditemukan", 400);
         }
-        $save_image = $request->file('image')->store('image', 'public');
-        $path = Storage::disk('public')->path($save_image);
+        $imageName = time() . '.' . $request->image->extension();
+        Storage::disk('public')->putFileAs('image', $request->file('image'), $imageName);
 
-        $file = storage_path('photos/' . $save_image);
+        $url = "http://127.0.0.1:8000/uploads/image/" . $imageName;
+
         $query->judul = $request->judul;
-        $query->path =  $path;
+        $query->path =  $url;
         $query->short_content = $request->short_content;
         $query->save();
 
