@@ -85,9 +85,18 @@ class BlogRepositoryImplement extends Eloquent implements BlogRepository
         if (empty($query)) {
             return BaseController::error(NULL, "Data tidak ditemukan", 400);
         }
+        $save_image = $request->file('image')->store('image', 'public');
+        $path = Storage::disk('public')->path($save_image);
+
+        $file = storage_path('photos/' . $save_image);
         $query->judul = $request->judul;
+        $query->path =  $path;
         $query->short_content = $request->short_content;
         $query->save();
+
+        $detail  = detail_blog::where('blog_id', $id)->first();
+        $detail->entry = $request->entry;
+        $detail->save();
 
         return BaseController::success($query, "Sukses mengubah data", 200);
     }
